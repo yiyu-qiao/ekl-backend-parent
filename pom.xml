@@ -43,6 +43,6 @@
     </dependencyManagement>
 
     <modules>
-        <module>../ekl-backend-ws</module>
+        <module>ekl-backend-ws</module>
     </modules>
 </project>

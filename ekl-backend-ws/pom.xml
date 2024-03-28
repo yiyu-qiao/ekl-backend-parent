@@ -7,7 +7,7 @@
 		<groupId>org.ekl.backend</groupId>
 		<artifactId>ekl-backend-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../ekl-backend-parent</relativePath>
+<!--		<relativePath>../pom.xml</relativePath>-->
 	</parent>
 
 	<artifactId>ekl-backend-ws</artifactId>
