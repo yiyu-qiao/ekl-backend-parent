@@ -1,0 +1,11 @@
+create table benutzer
+(
+    ID        UUID not null
+        primary key,
+    BIRTHDAY  DATE,
+    EMAIL     CHARACTER VARYING(255),
+    FIRSTNAME CHARACTER VARYING(255),
+    LASTNAME  CHARACTER VARYING(255),
+    PASSWD    CHARACTER VARYING(255),
+    USERNAME  CHARACTER VARYING(255)
+);
