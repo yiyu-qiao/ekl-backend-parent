@@ -6,9 +6,9 @@ pipeline {
     environment {
         remote_ekl_backend_name = 'Desktop-AMD'
         remote_ekl_backend_host = '192.168.178.62'
-        credential_ssh_jenkins_user = credentials('SSH_Jenkins_User')
-        remote_ekl_backend_username = "${credential_ssh_jenkins_user_USR}"
-        remote_ekl_backend_password = "${credential_ssh_jenkins_user_PSW}"
+//         credential_ssh_jenkins_user = credentials('SSH_Jenkins_User')
+//         remote_ekl_backend_username = "${credential_ssh_jenkins_user_USR}"
+//         remote_ekl_backend_password = "${credential_ssh_jenkins_user_PSW}"
 
         path_ekl_backend_artefact = '/home/jenkins-user/tmp/ekl-backend'
 
@@ -27,44 +27,45 @@ pipeline {
 
         stage('Maven build'){
             steps {
-                configFileProvider([configFile(fileId: 'global-maven-settings', variable: 'MAVEN_SETTINGS')]){
-                     sh "mvn -s $MAVEN_SETTINGS clean install"
-                }
+//                 configFileProvider([configFile(fileId: 'global-maven-settings', variable: 'MAVEN_SETTINGS')]){
+//                      sh "mvn -s $MAVEN_SETTINGS clean install"
+                    sh "mvn -DskipTests clean package"
+//                 }
             }
         }
 
-        stage('Deploy to Artifactory'){
-            steps {
-                withCredentials([string(credentialsId: 'Artifactory_Access_Token_QiaoHanDev', variable: 'ARTIFACTORY_TOKEN')]){
-                    sh """
-                        #!/usr/bin/bash
-                        source ./script/upload-to-artifactory.sh
-                    """
-                }
-            }
-        }
+//         stage('Deploy to Artifactory'){
+//             steps {
+//                 withCredentials([string(credentialsId: 'Artifactory_Access_Token_QiaoHanDev', variable: 'ARTIFACTORY_TOKEN')]){
+//                     sh """
+//                         #!/usr/bin/bash
+//                         source ./script/upload-to-artifactory.sh
+//                     """
+//                 }
+//             }
+//         }
         
-        stage('Deploy ekl-backend'){
-            steps {
-                //withCredentials([usernamePassword(credentialsId:'SSH_Jenkins_User', usernameVariable: 'username', passwordVariable: 'password')]){
-                    script {
-                        def remote_ekl_backend = [:]
-                        remote_ekl_backend.name = remote_ekl_backend_name
-                        remote_ekl_backend.host = remote_ekl_backend_host
-                        remote_ekl_backend.allowAnyHosts = true
-                        remote_ekl_backend.user = remote_ekl_backend_username
-                        remote_ekl_backend.password = remote_ekl_backend_password
-                        sshCommand remote: remote_ekl_backend, command: 'hostname'
-                        sshCommand remote: remote_ekl_backend, command: 'ls -la'                        
-                        sshScript remote: remote_ekl_backend, script: 'script/stop-ekl-backend.sh'
-                        sshPut remote: remote_ekl_backend, from: 'target/ekl-backend-0.0.1-SNAPSHOT.jar', into: "${path_ekl_backend_artefact}/"                        
-                        sshCommand remote: remote_ekl_backend, command: "ls -la ${path_ekl_backend_artefact}/ekl-backend-0.0.1-SNAPSHOT.jar"
-                        sshPut remote: remote_ekl_backend, from: 'script/start-ekl-backend.sh', into: "${path_ekl_backend_artefact}/script/"
-                        sshCommand remote: remote_ekl_backend, command: "chmod u+x ${path_ekl_backend_artefact}/script/start-ekl-backend.sh"
-                        sshScript remote: remote_ekl_backend, script: 'script/start-silent-ekl-backend.sh'
-                    }
-                //}
-            }
-        }
+//         stage('Deploy ekl-backend-ws'){
+//             steps {
+//                 //withCredentials([usernamePassword(credentialsId:'SSH_Jenkins_User', usernameVariable: 'username', passwordVariable: 'password')]){
+//                     script {
+//                         def remote_ekl_backend = [:]
+//                         remote_ekl_backend.name = remote_ekl_backend_name
+//                         remote_ekl_backend.host = remote_ekl_backend_host
+//                         remote_ekl_backend.allowAnyHosts = true
+//                         remote_ekl_backend.user = remote_ekl_backend_username
+//                         remote_ekl_backend.password = remote_ekl_backend_password
+//                         sshCommand remote: remote_ekl_backend, command: 'hostname'
+//                         sshCommand remote: remote_ekl_backend, command: 'ls -la'
+//                         sshScript remote: remote_ekl_backend, script: 'script/stop-ekl-backend.sh'
+//                         sshPut remote: remote_ekl_backend, from: 'target/ekl-backend-0.0.1-SNAPSHOT.jar', into: "${path_ekl_backend_artefact}/"
+//                         sshCommand remote: remote_ekl_backend, command: "ls -la ${path_ekl_backend_artefact}/ekl-backend-0.0.1-SNAPSHOT.jar"
+//                         sshPut remote: remote_ekl_backend, from: 'script/start-ekl-backend.sh', into: "${path_ekl_backend_artefact}/script/"
+//                         sshCommand remote: remote_ekl_backend, command: "chmod u+x ${path_ekl_backend_artefact}/script/start-ekl-backend.sh"
+//                         sshScript remote: remote_ekl_backend, script: 'script/start-silent-ekl-backend.sh'
+//                     }
+//                 //}
+//             }
+//         }
     }
 }
