@@ -29,6 +29,7 @@ pipeline {
             steps {
 //                 configFileProvider([configFile(fileId: 'global-maven-settings', variable: 'MAVEN_SETTINGS')]){
 //                      sh "mvn -s $MAVEN_SETTINGS clean install"
+                    sh "java -version"
                     sh "mvn -DskipTests clean package"
 //                 }
             }
