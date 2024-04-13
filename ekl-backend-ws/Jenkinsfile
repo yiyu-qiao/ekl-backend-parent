@@ -3,6 +3,10 @@ pipeline {
     tools {
         maven 'apache-maven-3.9.6'
     }
+
+    options {
+        timestamps()
+    }
     environment {
         remote_ekl_backend_name = 'Desktop-AMD'
         remote_ekl_backend_host = '192.168.178.62'
@@ -11,13 +15,13 @@ pipeline {
 //         remote_ekl_backend_password = "${credential_ssh_jenkins_user_PSW}"
 
         path_ekl_backend_artefact = '/home/jenkins-user/tmp/ekl-backend'
-
+        dockerImage=''
 
     }
     stages {
         stage('Init Git') {
             steps {
-                script{
+                script{ //nicht nötig, entfernen
                     def msg = sh(returnStdout:true, script:"""echo check out from Github Repository ${GIT_URL}
                                                               echo current branch ${GIT_BRANCH}""")
                     echo "Console output: ${msg}"
@@ -32,6 +36,22 @@ pipeline {
                     sh "java -version"
                     sh "mvn -DskipTests clean package"
 //                 }
+            }
+        }
+
+        stage('Build Image'){
+            steps {
+                echo "Build docker images"
+                dockerImage = docker.build("ekl-backend-ws:snapshot")
+            }
+        }
+
+        stage('Push Image'){
+            steps {
+                echo "Push image to Docker Hub"
+                docker.withRegistry('','Dockerhub_Token_Ponyworld') {
+                    dockerImage.push()
+                }
             }
         }
 
