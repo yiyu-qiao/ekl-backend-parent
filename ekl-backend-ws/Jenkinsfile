@@ -45,7 +45,7 @@ pipeline {
             steps {
                 echo "Build docker images ekl-backend-ws"
                sh """cd ekl-backend-ws
-                      docker build -t ponyworld/ekl-backend-ws:20240414T204351 ./
+                      docker build -t ${imageName} ./
                       pwd
                 """
             }
