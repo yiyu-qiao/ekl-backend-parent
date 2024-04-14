@@ -15,7 +15,8 @@ pipeline {
 //         remote_ekl_backend_password = "${credential_ssh_jenkins_user_PSW}"
 
         path_ekl_backend_artefact = '/home/jenkins-user/tmp/ekl-backend'
-        dockerImage=''
+        imageTag= sh(returnStdout:true, script:"date +%Y%m%dT%H%M%S")
+        imageName="ponyworld/ekl-backend-ws"
 
     }
     stages {
@@ -42,9 +43,8 @@ pipeline {
         stage('Build Image'){
             steps {
                 echo "Build docker images ekl-backend-ws"
-                dockerImage="ekl-backend-ws:dev-snapshot-2"
                 sh """cd ekl-backend-ws
-                      docker build -t ponyworld/${dockerImage} .
+                      docker build -t ${imageName}:${imageTag} .
                 """
             }
         }
@@ -54,9 +54,9 @@ pipeline {
                 echo "Push image to Docker Hub"
                 script {
                     docker.withRegistry('','Dockerhub_Token_Ponyworld') {
-                    sh """
-                        docker push ponyworld/${dockerImage}
-                    """
+                        sh """
+                            docker push ${imageName}:${imageTag}
+                        """
                     }
                 }
             }
