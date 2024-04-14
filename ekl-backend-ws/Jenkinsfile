@@ -16,7 +16,8 @@ pipeline {
 
         path_ekl_backend_artefact = '/home/jenkins-user/tmp/ekl-backend'
         imageTag= sh(returnStdout:true, script:"date +%Y%m%dT%H%M%S")
-        imageName="ponyworld/ekl-backend-ws"
+        appName="ponyworld/ekl-backend-ws"
+        imageName=${imageName}:${appName}
 
     }
     stages {
@@ -44,7 +45,7 @@ pipeline {
             steps {
                 echo "Build docker images ekl-backend-ws"
                 sh """cd ekl-backend-ws
-                      docker build -t ${imageName}:${imageTag} .
+                      docker build -t ${imageName} .
                       pwd
                 """
             }
@@ -56,7 +57,7 @@ pipeline {
                 script {
                     docker.withRegistry('','Dockerhub_Token_Ponyworld') {
                         sh """
-                            docker push ${imageName}:${imageTag}
+                            docker push ${imageName}
                         """
                     }
                 }
