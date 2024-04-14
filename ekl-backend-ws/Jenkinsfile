@@ -10,9 +10,10 @@ pipeline {
     }
 
     environment {
-        appName="ekl-backend-ws"
-        imageTag= sh(returnStdout:true, script:"date +%Y%m%dT%H%M%S").trim()
-        imageName="ponyworld/${appName}:${imageTag}"
+        registryNamespace="ponyworld"
+        registryRepository="ekl-backend-ws"
+        imageTag= sh(returnStdout:true, script:"date +%Y%m%dT%H%M%S").trim() //remove trailing newline
+        imageName="${registryNamespace}/${registryRepository}:${imageTag}"
     }
 
     stages {
@@ -29,7 +30,7 @@ pipeline {
         stage('Maven build'){
             steps {
                     sh "java -version"
-                    //sh "mvn -DskipTests clean package"
+                    sh "mvn -DskipTests clean package"
             }
         }
 
