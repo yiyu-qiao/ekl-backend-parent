@@ -1,5 +1,6 @@
 pipeline {
     agent any
+
     tools {
         maven 'apache-maven-3.9.6'
     }
@@ -7,24 +8,17 @@ pipeline {
     options {
         timestamps()
     }
+
     environment {
-        remote_ekl_backend_name = 'Desktop-AMD'
-        remote_ekl_backend_host = '192.168.178.62'
-//         credential_ssh_jenkins_user = credentials('SSH_Jenkins_User')
-//         remote_ekl_backend_username = "${credential_ssh_jenkins_user_USR}"
-//         remote_ekl_backend_password = "${credential_ssh_jenkins_user_PSW}"
-
-        path_ekl_backend_artefact = '/home/jenkins-user/tmp/ekl-backend'
+        appName="ekl-backend-ws"
         imageTag= sh(returnStdout:true, script:"date +%Y%m%dT%H%M%S")
-        appName="ponyworld/ekl-backend-ws"
-        imageName="${appName}:${imageTag}"
-        buildArgs="${imageName} ."
-
+        imageName="ponyworld/${appName}:${imageTag}"
     }
+
     stages {
         stage('Init Git') {
             steps {
-                script{ //nicht nötig, entfernen
+                script{ //Groovy syntax is allowed
                     def msg = sh(returnStdout:true, script:"""echo check out from Github Repository ${GIT_URL}
                                                               echo current branch ${GIT_BRANCH}""")
                     echo "Console output: ${msg}"
@@ -36,8 +30,9 @@ pipeline {
             steps {
 //                 configFileProvider([configFile(fileId: 'global-maven-settings', variable: 'MAVEN_SETTINGS')]){
 //                      sh "mvn -s $MAVEN_SETTINGS clean install"
-                    sh "java -version"
-                    //sh "mvn -DskipTests clean package"
+                    sh """java -version
+                          mvn -DskipTests clean package
+                    """
 //                 }
             }
         }
@@ -45,9 +40,10 @@ pipeline {
         stage('Build Image'){
             steps {
                 echo "Build docker images ekl-backend-ws"
-                echo "${buildArgs}"
-               sh """cd ekl-backend-ws
-                      docker build -t local/ekl-backend-ws:latest .
+                sh """cd ekl-backend-ws
+//                       docker build -t local/ekl-backend-ws:latest .
+                        docker build -t ${imageName} \
+                         .
                       docker tag local/ekl-backend-ws:latest ${imageName}
                       docker image rm local/ekl-backend-ws:latest
                 """
