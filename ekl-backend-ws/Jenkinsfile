@@ -38,8 +38,6 @@ pipeline {
                 echo "Build docker images ekl-backend-ws"
                 sh """cd ekl-backend-ws
                       docker build -t ${imageName} .
-                      docker tag local/ekl-backend-ws:latest ${imageName}
-                      docker image rm local/ekl-backend-ws:latest
                 """
             }
         }
