@@ -11,8 +11,8 @@ pipeline {
 
     environment {
         appName="ekl-backend-ws"
-        imageTag= sh(returnStdout:true, script:"date +%Y%m%dT%H%M%S")
-        imageName="ponyworld/${appName}:20240414T234534"
+        imageTag= sh(returnStdout:true, script:"date +%Y%m%dT%H%M%S").trim()
+        imageName="ponyworld/${appName}:${imageTag}"
     }
 
     stages {
