@@ -45,6 +45,7 @@ pipeline {
                 echo "Build docker images ekl-backend-ws"
                 sh """cd ekl-backend-ws
                       docker build -t ${imageName}:${imageTag} .
+                      pwd
                 """
             }
         }
