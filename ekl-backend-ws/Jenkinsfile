@@ -42,8 +42,9 @@ pipeline {
         stage('Build Image'){
             steps {
                 echo "Build docker images ekl-backend-ws"
+                dockerImage="ekl-backend-ws:dev-snapshot-2"
                 sh """cd ekl-backend-ws
-                      docker build -t ponyworld/ekl-backend-ws:dev-snapshot-1 .
+                      docker build -t ponyworld/${dockerImage} .
                 """
             }
         }
@@ -54,7 +55,7 @@ pipeline {
                 script {
                     docker.withRegistry('','Dockerhub_Token_Ponyworld') {
                     sh """
-                        docker push ponyworld/ekl-backend-ws:dev-snapshot-1
+                        docker push ponyworld/${dockerImage}
                     """
                     }
                 }
