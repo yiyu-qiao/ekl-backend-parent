@@ -44,7 +44,8 @@ pipeline {
                 echo "Build docker images ekl-backend-ws"
                 script {
                     sh "pwd"
-                    dockerImage = docker.build("ekl-backend-ws:snapshot")
+                    sh "docker build -t ekl-backend-ws:snapshot"
+//                     dockerImage = docker.build("ekl-backend-ws:snapshot")
                 }
             }
         }
