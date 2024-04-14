@@ -45,6 +45,7 @@ pipeline {
         stage('Build Image'){
             steps {
                 echo "Build docker images ekl-backend-ws"
+                echo "${buildArgs}"
                sh """cd ekl-backend-ws
                       docker build -t ${buildArgs}
                       pwd
