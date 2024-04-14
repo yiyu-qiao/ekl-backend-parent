@@ -47,6 +47,7 @@ pipeline {
                 echo "Build docker images ekl-backend-ws"
                 echo "${buildArgs}"
                sh """cd ekl-backend-ws
+                      docker image rm local/ekl-backend-ws:latest
                       docker build -t local/ekl-backend-ws:latest .
                       docker tag local/ekl-backend-ws:latest ${imageName}
                 """
@@ -60,6 +61,8 @@ pipeline {
                     docker.withRegistry('','Dockerhub_Token_Ponyworld') {
                         sh """
                             docker push ${imageName}
+                            docker image rm local/ekl-backend-ws:latest
+                            docker image rm ${imageName}
                         """
                     }
                 }
