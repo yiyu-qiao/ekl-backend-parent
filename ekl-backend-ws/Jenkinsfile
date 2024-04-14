@@ -41,7 +41,7 @@ pipeline {
 
         stage('Build Image'){
             steps {
-                echo "Build docker images"
+                echo "Build docker images ekl-backend-ws"
                 script {
                     dockerImage = docker.build("ekl-backend-ws:snapshot")
                 }
