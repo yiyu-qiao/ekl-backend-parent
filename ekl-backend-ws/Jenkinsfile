@@ -36,7 +36,7 @@ pipeline {
 //                 configFileProvider([configFile(fileId: 'global-maven-settings', variable: 'MAVEN_SETTINGS')]){
 //                      sh "mvn -s $MAVEN_SETTINGS clean install"
                     sh "java -version"
-                    sh "mvn -DskipTests clean package"
+                    //sh "mvn -DskipTests clean package"
 //                 }
             }
         }
@@ -44,8 +44,8 @@ pipeline {
         stage('Build Image'){
             steps {
                 echo "Build docker images ekl-backend-ws"
-                sh """cd ekl-backend-ws
-                      docker build -t ponyworld/ekl-backend-ws:20240414T204351 .
+               sh """cd ekl-backend-ws
+                      docker build -t ponyworld/ekl-backend-ws:20240414T204351 ./
                       pwd
                 """
             }
