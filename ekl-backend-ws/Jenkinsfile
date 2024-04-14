@@ -28,10 +28,8 @@ pipeline {
 
         stage('Maven build'){
             steps {
-                    /* sh """java -version
-                          mvn -DskipTests clean package
-                     """
-                     */
+                    sh "java -version"
+                    //sh "mvn -DskipTests clean package"
             }
         }
 
