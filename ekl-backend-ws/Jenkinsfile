@@ -18,6 +18,7 @@ pipeline {
         imageTag= sh(returnStdout:true, script:"date +%Y%m%dT%H%M%S")
         appName="ponyworld/ekl-backend-ws"
         imageName="${appName}:${imageTag}"
+        buildArgs="${imageName} ."
 
     }
     stages {
@@ -45,7 +46,7 @@ pipeline {
             steps {
                 echo "Build docker images ekl-backend-ws"
                sh """cd ekl-backend-ws
-                      docker build -t ${imageName} ./
+                      docker build -t ${buildArgs}
                       pwd
                 """
             }
