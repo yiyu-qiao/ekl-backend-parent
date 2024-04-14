@@ -39,7 +39,6 @@ pipeline {
 
         stage('Build Image'){
             steps {
-//                       docker build -t local/ekl-backend-ws:latest .
                 echo "Build docker images ekl-backend-ws"
                 sh """cd ekl-backend-ws
                         docker build -t ${imageName} \
