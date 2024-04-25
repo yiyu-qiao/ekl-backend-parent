@@ -48,7 +48,7 @@ pipeline {
             steps {
                 echo "Push image to Docker Hub"
                 script {
-                    docker.withRegistry('','Dockerhub_Token_Ponyworld') {
+                    docker.withRegistry('','DOCKERHUB_TOKEN_PONYWORLD') {
                         sh """
                             docker push ${imageName}
                             docker image rm ${imageName}
