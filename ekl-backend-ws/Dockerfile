@@ -4,5 +4,5 @@
 
 FROM ubuntu:22.04
 RUN apt update
-RUN apt install openjdk-21-jre/jammy-updates
+RUN apt install -y openjdk-21-jre/jammy-updates
 ENTRYPOINT ["/bin/bash"]
