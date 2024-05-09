@@ -1,3 +1,3 @@
-FROM alpine:3.14
-RUN apk add --no-cache mysql-client
-ENTRYPOINT ["mysql"]
+FROM alpine:3.19
+RUN apk add openjdk21
+ENTRYPOINT ["/bin/sh"]
