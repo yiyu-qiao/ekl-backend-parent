@@ -17,6 +17,12 @@ pipeline {
         imageName="${registryNamespace}/${registryRepository}:${imageTag}"
     }
 
+    parameters {
+        choice(name: 'buildImageTarget', choices: ['ekl-backend-ws', 'ekl-alpine-jre' ],
+            description: 'select the target build stage of docker image, default ekl-backend-ws')
+
+    }
+
     stages {
         stage('Init Git') {
             steps {
@@ -29,6 +35,11 @@ pipeline {
         }
 
         stage('Maven build'){
+            when {
+                equals
+                    expected: "ekl-backend-ws",
+                    actual: "${params.buildImageTarget}"
+            }
             steps {
                     sh "java -version"
                     sh "mvn -DskipTests clean package"
@@ -36,24 +47,36 @@ pipeline {
         }
 
         stage('Build Image'){
-            steps {
-                echo "Build docker images ekl-backend-ws"
-                sh """cd ekl-backend-ws
-                      docker build -t ${imageName} .
-                """
+            if(${params.buildImageTarget} == 'ekl-backend-ws') {
+                steps {
+                    echo "Build docker images ekl-backend-ws"
+                    sh """cd ekl-backend-ws
+                          docker build -t ${imageName} .
+                    """
+                }
+            } else {
+                steps {
+                    echo "Build docker images ekl-alpine-jre"
+                }
             }
         }
 
         stage('Push Image'){
-            steps {
-                echo "Push image to Docker Hub"
-                script {
-                    docker.withRegistry('','DOCKERHUB_TOKEN_PONYWORLD') {
-                        sh """
-                            docker push ${imageName}
-                            docker image rm ${imageName}
-                        """
+            if(${params.buildImageTarget} == 'ekl-backend-ws') {
+                steps {
+                    echo "Push image to Docker Hub"
+                    script {
+                        docker.withRegistry('','DOCKERHUB_TOKEN_PONYWORLD') {
+                            sh """
+                                docker push ${imageName}
+                                docker image rm ${imageName}
+                            """
+                        }
                     }
+                }
+            } else {
+                steps {
+                    echo "Build docker images ekl-alpine-jre"
                 }
             }
         }
