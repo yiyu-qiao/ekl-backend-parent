@@ -46,16 +46,12 @@ pipeline {
 
         stage('Build Image'){
             if(params.buildImageTarget == 'ekl-backend-ws') {
-                steps {
                     echo "Build docker images ekl-backend-ws"
                     sh """cd ekl-backend-ws
                           docker build -t ${imageName} .
                     """
-                }
             } else {
-                steps {
                     echo "Build docker images ekl-alpine-jre"
-                }
             }
         }
 
