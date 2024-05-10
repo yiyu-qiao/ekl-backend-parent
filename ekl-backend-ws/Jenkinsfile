@@ -45,25 +45,23 @@ pipeline {
         }
 
         stage('Build Image'){
-                steps {
-                    echo "Build docker images ekl-backend-ws"
-                    sh """cd ekl-backend-ws
-                          docker build -t ${imageName} .
-                    """
-                }
+            steps {
+                echo "Build docker images ekl-backend-ws"
+                sh """cd ekl-backend-ws
+                      docker build -t ${imageName} .
+                """
             }
         }
 
         stage('Push Image'){
-                steps {
-                    echo "Push image to Docker Hub"
-                    script {
-                        docker.withRegistry('','DOCKERHUB_TOKEN_PONYWORLD') {
-                            sh """
-                                docker push ${imageName}
-                                docker image rm ${imageName}
-                            """
-                        }
+            steps {
+                echo "Push image to Docker Hub"
+                script {
+                    docker.withRegistry('','DOCKERHUB_TOKEN_PONYWORLD') {
+                        sh """
+                            docker push ${imageName}
+                            docker image rm ${imageName}
+                        """
                     }
                 }
             }
