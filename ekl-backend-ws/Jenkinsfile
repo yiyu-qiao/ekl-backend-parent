@@ -45,18 +45,16 @@ pipeline {
         }
 
         stage('Build Image'){
-            if(params.buildImageTarget == 'ekl-backend-ws') {
+                steps {
                     echo "Build docker images ekl-backend-ws"
                     sh """cd ekl-backend-ws
                           docker build -t ${imageName} .
                     """
-            } else {
-                    echo "Build docker images ekl-alpine-jre"
+                }
             }
         }
 
         stage('Push Image'){
-            if(params.buildImageTarget == 'ekl-backend-ws') {
                 steps {
                     echo "Push image to Docker Hub"
                     script {
@@ -67,10 +65,6 @@ pipeline {
                             """
                         }
                     }
-                }
-            } else {
-                steps {
-                    echo "Build docker images ekl-alpine-jre"
                 }
             }
         }
