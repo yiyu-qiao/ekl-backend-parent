@@ -36,9 +36,7 @@ pipeline {
 
         stage('Maven build'){
             when {
-                equals
-                    expected: "ekl-backend-ws",
-                    actual: "${params.buildImageTarget}"
+                ${params.buildImageTarget} equals: "ekl-backend-ws"
             }
             steps {
                     sh "java -version"
