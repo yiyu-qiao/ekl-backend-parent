@@ -53,7 +53,7 @@ pipeline {
             steps {
                 script {
                         echo "Build docker image ${params.buildImageTarget}"
-                        if(params.buildImageTarget == "${targetEklAlpineJRE}") {
+                        if(params.buildImageTarget == targetEklAlpineJRE) {
                             imageName = "${registryNamespace}/${registryRepositoryEklAlpineJRE}/${imageTag}"
                         } else {
                             imageName = "${registryNamespace}/${registryRepositoryEklBackendWS}/${builtTimestamp}"
