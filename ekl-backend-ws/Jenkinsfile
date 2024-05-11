@@ -21,7 +21,7 @@ pipeline {
     }
 
     parameters {
-        choice(name: 'buildImageTarget', choices: ["ekl-backend-ws", env.targetEklAlpineJRE],
+        choice(name: 'buildImageTarget', choices: ["ekl-backend-ws", 'ekl-alpine-jre'],
             description: 'select the target build stage of docker image, default ekl-backend-ws')
 
         string(name: 'imageTag', defaultValue: 'latest', description: 'give tag of the image ekl-alpine-jre')
@@ -41,7 +41,7 @@ pipeline {
 
         stage('Maven build'){
             when {
-                equals(actual: params.buildImageTarget, expected: targetEklBackendWS)
+                equals(actual: params.buildImageTarget, expected: env.targetEklBackendWS)
             }
             steps {
                     sh "java -version"
