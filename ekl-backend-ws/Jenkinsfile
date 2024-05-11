@@ -53,15 +53,15 @@ pipeline {
             steps {
                 script {
                         echo "Build docker image ${params.buildImageTarget}"
-                        if(params.buildImageTarget == targetEklAlpineJRE) {
-                            imageName = "${registryNamespace}/${registryRepositoryEklAlpineJRE}/${imageTag}"
-                        } else {
-                            imageName = "${registryNamespace}/${registryRepositoryEklBackendWS}/${builtTimestamp}"
-                        }
-                        sh """
-                            cd ekl-backend-ws
-                            docker build --target ${params.buildImageTarget} -t ${imageName} .
-                        """
+//                         if(params.buildImageTarget == targetEklAlpineJRE) {
+//                             imageName = "${registryNamespace}/${registryRepositoryEklAlpineJRE}/${imageTag}"
+//                         } else {
+//                             imageName = "${registryNamespace}/${registryRepositoryEklBackendWS}/${builtTimestamp}"
+//                         }
+//                         sh """
+//                             cd ekl-backend-ws
+//                             docker build --target ${params.buildImageTarget} -t ${imageName} .
+//                         """
                 }
             }
         }
@@ -69,14 +69,14 @@ pipeline {
         stage('Push Image'){
             steps {
                 echo "Push image ${imageName} to Docker Hub"
-                script {
-                    docker.withRegistry('','DOCKERHUB_TOKEN_PONYWORLD') {
-                        sh """
-                            docker push ${imageName}
-                            docker image rm ${imageName}
-                        """
-                    }
-                }
+//                 script {
+//                     docker.withRegistry('','DOCKERHUB_TOKEN_PONYWORLD') {
+//                         sh """
+//                             docker push ${imageName}
+//                             docker image rm ${imageName}
+//                         """
+//                     }
+//                 }
             }
         }
 
