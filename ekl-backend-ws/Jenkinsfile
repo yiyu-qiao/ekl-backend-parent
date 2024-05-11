@@ -60,6 +60,9 @@ pipeline {
                     echo "build artifact ekl-backend-ws-${env.eklBackendWSVersion}.jar"
                     sh "java -version"
                     sh "mvn -DskipTests clean package"
+                    def version = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
+                    echo "pom version: ${version}"
+
             }
         }
 
