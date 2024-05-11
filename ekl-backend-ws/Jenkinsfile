@@ -15,21 +15,25 @@ pipeline {
         registryRepository="ekl-backend-ws"
         imageTag= sh(returnStdout:true, script:"date +%Y%m%dT%H%M%S").trim() //remove trailing newline
         imageName="${registryNamespace}/${registryRepository}:${imageTag}"
+        targetEklAlpineJRE = 'ekl-alpine-jre'
+        targetEklBackendWS = 'ekl-backend-ws'
     }
 
     parameters {
         choice(name: 'buildImageTarget', choices: ['ekl-backend-ws', 'ekl-alpine-jre' ],
             description: 'select the target build stage of docker image, default ekl-backend-ws')
 
+        string(name: 'imageTag', defaultValue: 'latest', description: 'give tag of the image ekl-alpine-jre')
     }
 
     stages {
-        stage('Init Git') {
+        stage('Init build') {
             steps {
                 script{ //Groovy syntax is allowed
                     def msg = sh(returnStdout:true, script:"""echo check out from Github Repository ${GIT_URL}
                                                               echo current branch ${GIT_BRANCH}""")
                     echo "Console output: ${msg}"
+//                     if(params.buildImageTarget == "ekl-alpine-jre")
                 }
             }
         }
@@ -54,6 +58,11 @@ pipeline {
                         """
                     } else {
                         echo "Build docker image ekl-alpine-jre"
+                        sh """
+                            cd ekl-backend-ws
+                            imageName="${registryNamespace}/ekl-alpine-jre-21:${imageTag}"
+                            docker build --target ekl-alpine-jre -t ${imageName} .
+                        """
                     }
                 }
             }
