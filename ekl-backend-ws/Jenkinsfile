@@ -1,4 +1,8 @@
+/* defines a global variable which is available in all blocks, the global variable is accessable
+   with env.${GLOBAL_VARIABLE_NAME}. It also works without the prefix env
+*/
 def imageName
+
 pipeline {
     agent any
 
@@ -36,12 +40,12 @@ pipeline {
                     echo "Console output: ${msg}"
                     if(params.buildImageTarget == env.targetEklAlpineJRE) {
                         echo "Initialize build image ${env.targetEklAlpineJRE}"
-                        imageName = "${registryNamespace}/${registryRepositoryEklAlpineJRE}/${params.imageTag}"
+                        env.imageName = "${registryNamespace}/${registryRepositoryEklAlpineJRE}/${params.imageTag}"
                     } else {
                         echo "Initialize build image ${env.targetEklBackendWS}"
-                        imageName = "${registryNamespace}/${registryRepositoryEklBackendWS}/${env.builtTimestamp}"
+                        env.imageName = "${registryNamespace}/${registryRepositoryEklBackendWS}/${env.builtTimestamp}"
                     }
-                    echo "Initialization for build image ${imageName} done."
+                    echo "Initialization for build image ${env.imageName} done."
                 }
             }
         }
@@ -60,15 +64,15 @@ pipeline {
             steps {
                 script {
                         echo "Build docker image ${params.buildImageTarget}"
-//                         if(params.buildImageTarget == targetEklAlpineJRE) {
-//                             imageName = "${registryNamespace}/${registryRepositoryEklAlpineJRE}/${imageTag}"
-//                         } else {
-//                             imageName = "${registryNamespace}/${registryRepositoryEklBackendWS}/${builtTimestamp}"
-//                         }
-//                         sh """
-//                             cd ekl-backend-ws
-//                             docker build --target ${params.buildImageTarget} -t ${imageName} .
-//                         """
+                        if(params.buildImageTarget == env.targetEklAlpineJRE) {
+                            env.imageName = "${registryNamespace}/${registryRepositoryEklAlpineJRE}/${imageTag}"
+                        } else {
+                            env.imageName = "${registryNamespace}/${registryRepositoryEklBackendWS}/${builtTimestamp}"
+                        }
+                        sh """
+                            cd ekl-backend-ws
+                            docker build --target ${params.buildImageTarget} -t ${imageName} .
+                        """
                 }
             }
         }
