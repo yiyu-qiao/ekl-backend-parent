@@ -11,16 +11,17 @@ pipeline {
     }
 
     environment {
-        registryNamespace="ponyworld"
-        registryRepository="ekl-backend-ws"
-        imageTag= sh(returnStdout:true, script:"date +%Y%m%dT%H%M%S").trim() //remove trailing newline
-        imageName="${registryNamespace}/${registryRepository}:${imageTag}"
+        registryNamespace = 'ponyworld'
+        registryRepositoryEklBackendWS = 'ekl-backend-ws'
+        registryRepositoryEklAlpineJRE = 'ekl-alpine-jre-21'
+        builtTimestamp= sh(returnStdout:true, script:"date +%Y%m%dT%H%M%S").trim() //remove trailing newline
         targetEklAlpineJRE = 'ekl-alpine-jre'
         targetEklBackendWS = 'ekl-backend-ws'
+        imageName = ''
     }
 
     parameters {
-        choice(name: 'buildImageTarget', choices: ['ekl-backend-ws', 'ekl-alpine-jre' ],
+        choice(name: 'buildImageTarget', choices: [${targetEklBackendWS}, ${targetEklAlpineJRE}],
             description: 'select the target build stage of docker image, default ekl-backend-ws')
 
         string(name: 'imageTag', defaultValue: 'latest', description: 'give tag of the image ekl-alpine-jre')
@@ -40,7 +41,7 @@ pipeline {
 
         stage('Maven build'){
             when {
-                equals(actual: params.buildImageTarget, expected:"ekl-backend-ws")
+                equals(actual: params.buildImageTarget, expected:${targetEklBackendWS})
             }
             steps {
                     sh "java -version"
@@ -51,26 +52,23 @@ pipeline {
         stage('Build Image'){
             steps {
                 script {
-                    if(params.buildImageTarget == "ekl-backend-ws"){
-                        echo "Build docker image ekl-backend-ws"
-                        sh """cd ekl-backend-ws
-                              docker build -t ${imageName} .
-                        """
-                    } else {
-                        echo "Build docker image ekl-alpine-jre"
+                        echo "Build docker image ${params.buildImageTarget}"
+                        if(params.buildImageTarget == ${targetEklAlpineJRE}) {
+                            imageName = "${registryNamespace}/${registryRepositoryEklAlpineJRE}/${imageTag}"
+                        } else {
+                            imageName = "${registryNamespace}/${registryRepositoryEklBackendWS}/${builtTimestamp}"
+                        }
                         sh """
                             cd ekl-backend-ws
-                            imageName="${registryNamespace}/ekl-alpine-jre-21:${imageTag}"
-                            docker build --target ekl-alpine-jre -t ${imageName} .
+                            docker build --target ${params.buildImageTarget} -t ${imageName} .
                         """
-                    }
                 }
             }
         }
 
         stage('Push Image'){
             steps {
-                echo "Push image to Docker Hub"
+                echo "Push image ${imageName} to Docker Hub"
                 script {
                     docker.withRegistry('','DOCKERHUB_TOKEN_PONYWORLD') {
                         sh """
