@@ -58,7 +58,8 @@ pipeline {
             }
             steps {
                 script {
-                        env.eklBackendWSVersion = sh script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true
+//                         env.eklBackendWSVersion = sh script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true
+                        env.eklBackendWSVersion = sh(returnStdout: true, script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout")
                         echo "build artifact ekl-backend-ws-${env.eklBackendWSVersion}.jar"
                         sh "java -version"
                         sh "mvn -DskipTests clean package"
