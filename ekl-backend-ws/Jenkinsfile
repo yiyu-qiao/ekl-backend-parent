@@ -48,8 +48,6 @@ pipeline {
                         env.imageName = "${registryNamespace}/${registryRepositoryEklBackendWS}:${env.builtTimestamp}"
                     }
                     echo "Initialization for build image ${env.imageName} done."
-                    def version = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
-                    echo "pom version: ${version}"
                 }
             }
         }
@@ -62,6 +60,7 @@ pipeline {
                     echo "build artifact ekl-backend-ws-${env.eklBackendWSVersion}.jar"
                     sh "java -version"
                     sh "mvn -DskipTests clean package"
+                    sh "mvn help:evaluate -Dexpression=project.version"
             }
         }
 
