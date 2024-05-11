@@ -40,10 +40,10 @@ pipeline {
                     echo "Console output: ${msg}"
                     if(params.buildImageTarget == env.targetEklAlpineJRE) {
                         echo "Initialize build image ${env.targetEklAlpineJRE}"
-                        env.imageName = "${registryNamespace}/${registryRepositoryEklAlpineJRE}/${params.imageTag}"
+                        env.imageName = "${registryNamespace}/${registryRepositoryEklAlpineJRE}:${params.imageTag}"
                     } else {
                         echo "Initialize build image ${env.targetEklBackendWS}"
-                        env.imageName = "${registryNamespace}/${registryRepositoryEklBackendWS}/${env.builtTimestamp}"
+                        env.imageName = "${registryNamespace}/${registryRepositoryEklBackendWS}:${env.builtTimestamp}"
                     }
                     echo "Initialization for build image ${env.imageName} done."
                 }
@@ -63,15 +63,10 @@ pipeline {
         stage('Build Image'){
             steps {
                 script {
-                        echo "Build docker image ${params.buildImageTarget}"
-                        if(params.buildImageTarget == env.targetEklAlpineJRE) {
-                            env.imageName = "${registryNamespace}/${registryRepositoryEklAlpineJRE}/${imageTag}"
-                        } else {
-                            env.imageName = "${registryNamespace}/${registryRepositoryEklBackendWS}/${builtTimestamp}"
-                        }
+                        echo "Build docker image ${env.imageName}"
                         sh """
                             cd ekl-backend-ws
-                            docker build --target ${params.buildImageTarget} -t ${imageName} .
+                            docker build --target ${params.buildImageTarget} -t ${env.imageName} .
                         """
                 }
             }
@@ -79,15 +74,15 @@ pipeline {
 
         stage('Push Image'){
             steps {
-                echo "Push image ${imageName} to Docker Hub"
-//                 script {
-//                     docker.withRegistry('','DOCKERHUB_TOKEN_PONYWORLD') {
-//                         sh """
-//                             docker push ${imageName}
-//                             docker image rm ${imageName}
-//                         """
-//                     }
-//                 }
+                echo "Push image ${env.imageName} to Docker Hub"
+                script {
+                    docker.withRegistry('','DOCKERHUB_TOKEN_PONYWORLD') {
+                        sh """
+                            docker push ${env.imageName}
+                            docker image rm ${env.imageName}
+                        """
+                    }
+                }
             }
         }
 
