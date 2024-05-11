@@ -35,7 +35,7 @@ pipeline {
                                                               echo current branch ${GIT_BRANCH}""")
                     echo "Console output: ${msg}"
                     if(params.buildImageTarget == env.targetEklAlpineJRE) {
-                        imageName = "${registryNamespace}/${registryRepositoryEklAlpineJRE}/${params.imageTag}"
+                        env.imageName = "${registryNamespace}/${registryRepositoryEklAlpineJRE}/${params.imageTag}"
                     }
                     echo "Initialization for build image ${env.imageName} done."
                 }
