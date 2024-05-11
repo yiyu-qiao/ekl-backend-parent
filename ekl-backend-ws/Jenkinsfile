@@ -21,7 +21,7 @@ pipeline {
     }
 
     parameters {
-        choice(name: 'buildImageTarget', choices: ["${targetEklBackendWS}", "${targetEklAlpineJRE}"],
+        choice(name: 'buildImageTarget', choices: ["targetEklBackendWS", "targetEklAlpineJRE"],
             description: 'select the target build stage of docker image, default ekl-backend-ws')
 
         string(name: 'imageTag', defaultValue: 'latest', description: 'give tag of the image ekl-alpine-jre')
