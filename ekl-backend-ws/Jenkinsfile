@@ -34,7 +34,10 @@ pipeline {
                     def msg = sh(returnStdout:true, script:"""echo check out from Github Repository ${GIT_URL}
                                                               echo current branch ${GIT_BRANCH}""")
                     echo "Console output: ${msg}"
-//                     if(params.buildImageTarget == "ekl-alpine-jre")
+                    if(params.buildImageTarget == env.targetEklAlpineJRE) {
+                        imageName = "${registryNamespace}/${registryRepositoryEklAlpineJRE}/${params.imageTag}"
+                    }
+                    echo "Initialization for build image ${env.imageName} done."
                 }
             }
         }
