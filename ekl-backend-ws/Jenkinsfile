@@ -57,11 +57,13 @@ pipeline {
                 equals(actual: params.buildImageTarget, expected: env.targetEklBackendWS)
             }
             steps {
-                    echo "build artifact ekl-backend-ws-${env.eklBackendWSVersion}.jar"
-                    sh "mvn help:evaluate -Dexpression=project.version"
-                    version = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
-                    sh "java -version"
-                    sh "mvn -DskipTests clean package"
+                script {
+                        echo "build artifact ekl-backend-ws-${env.eklBackendWSVersion}.jar"
+                        sh "mvn help:evaluate -Dexpression=project.version"
+                        version = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
+                        sh "java -version"
+                        sh "mvn -DskipTests clean package"
+                }
             }
         }
 
