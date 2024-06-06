@@ -7,6 +7,6 @@ ARG ARTIFACT_EKL_BE_WS_NAME
 COPY target/$ARTIFACT_EKL_BE_WS_NAME /usr/local/bin/ekl-backend-ws.jar
 RUN chmod +x /usr/local/bin/ekl-backend-ws.jar
 RUN echo $ARTIFACT_EKL_BE_WS_NAME > /usr/local/bin/ekl-backend-ws-version.txt
-COPY start_ekl_backend_ws.sh /usr/local/bin/
+COPY script/start_ekl_backend_ws.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/start_ekl_backend_ws.sh
 ENTRYPOINT ["/usr/local/bin/start_ekl_backend_ws.sh"]
