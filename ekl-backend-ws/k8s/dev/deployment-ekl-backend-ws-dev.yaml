@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ekl-backend-ws-dev
+  namespace: ekl-k8s-dev
+spec:
+  selector:
+    matchLabels:
+      app: ekl-backend-ws-dev
+  template:
+    metadata:
+      labels:
+        app: ekl-backend-ws-dev
+    spec:
+      containers:
+        - name: ekl-backend-ws-dev
+          image:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+  progressDeadlineSeconds: 120
+
