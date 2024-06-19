@@ -1,8 +1,0 @@
-apiVersion: v1
-data:
-  ekl-backend-ws-dev.properties: |
-    spring.profiles.active=dev
-kind: ConfigMap
-metadata:
-  name: ekl-backend-ws-dev
-  namespace: ekl-k8s-dev

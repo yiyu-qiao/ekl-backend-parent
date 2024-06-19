@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ekl-backend-ws
+spec:
+  selector:
+    matchLabels:
+      app: ekl-backend-ws
+  template:
+    metadata:
+      labels:
+        app: ekl-backend-ws
+    spec:
+      containers:
+        - name: ekl-backend-ws
+          image: ekl-backend-ws
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: ekl-backend-ws
+            - secretRef:
+                name: ekl-backend-ws
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+  progressDeadlineSeconds: 120
+

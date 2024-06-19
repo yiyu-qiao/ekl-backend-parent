@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ekl-backend-ws
+spec:
+  template:
+    spec:
+      containers:
+        - name: ekl-backend-ws
+          envFrom:
+            - configMapRef:
+                name: ekl-backend-ws-dev
+            - secretRef:
+                name: ekl-backend-ws-dev
