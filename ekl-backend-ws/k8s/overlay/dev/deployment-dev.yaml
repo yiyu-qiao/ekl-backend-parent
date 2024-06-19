@@ -6,7 +6,7 @@ spec:
   template:
     spec:
       containers:
-        - name: ekl-backend-ws
+        - name: ekl-backend-ws-dev
           envFrom:
             - configMapRef:
                 name: ekl-backend-ws-dev
