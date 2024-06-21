@@ -6,9 +6,10 @@ spec:
   template:
     spec:
       containers:
-        - name: ekl-backend-ws-dev
+        - name: ekl-backend-ws
           envFrom:
             - configMapRef:
                 name: ekl-backend-ws-dev
             - secretRef:
                 name: ekl-backend-ws-dev
+  replicas: 1
