@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: ekl-backend-ws
+spec:
+  hosts:
+    - ekl-backend-ws.ponyworld.io
+  gateways:
+    - ekl-backend-ws
+  http:
+    - route:
+        - destination:
+            host: ekl-backend-ws
+            port: 8080
+      timeout: 60s

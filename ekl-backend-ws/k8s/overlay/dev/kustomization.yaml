@@ -9,7 +9,9 @@ commonLabels:
 patches:
   - path: configmap-dev.yaml
   - path: deployment-dev.yaml
+  - path: virtualservice-dev.yaml
+  - path: service-dev.yaml
 images:
   - name: ekl-backend-ws
     newName: ponyworld/ekl-backend-ws
-    newTag: {{IMAGE_TAG}}
+    newTag: 20240519T234508

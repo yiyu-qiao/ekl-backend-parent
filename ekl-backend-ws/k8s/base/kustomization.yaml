@@ -3,3 +3,6 @@ kind: Kustomization
 resources:
   - deployment.yaml
   - configmap.yaml
+  - virtualservice.yaml
+  - service.yaml
+  - gateway.yaml
