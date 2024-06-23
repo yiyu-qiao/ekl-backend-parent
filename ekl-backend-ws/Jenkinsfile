@@ -97,6 +97,7 @@ pipeline {
             steps {
                 withKubeConfig([credentialsId: 'EKL_K8S_ADMIN']){
                     sh """
+                        pwd
                         kubectl apply -k k8s/overlay/dev
                         kubectl get all -n ekl-k8s-dev
                     """
