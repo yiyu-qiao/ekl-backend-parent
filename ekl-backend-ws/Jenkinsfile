@@ -31,6 +31,9 @@ pipeline {
             description: 'select the target build stage of docker image, default ekl-backend-ws')
 
         string(name: 'imageTag', defaultValue: 'latest', description: 'give tag of the image ekl-alpine-jre')
+
+        choice(name: 'buildStage', choicies: ["dev", "test", "prod"]),
+            description: 'select the stage to be built and deployed, default dev'
     }
 
     stages {
@@ -93,13 +96,13 @@ pipeline {
             }
         }
 
-        stage('Deploy to ekl-k8s'){
+        stage('Deploy to ekl-k8s-${params.buildStage}'){
             steps {
                 withKubeConfig([credentialsId: 'EKL_K8S_ADMIN']){
                     sh """
                         pwd
                         ls -la
-                        kubectl apply -k k8s/overlay/dev
+                        kubectl apply -k ekl-backend-ws/k8s/overlay/${params.buildStage}
                         kubectl get all -n ekl-k8s-dev
                     """
                 }
