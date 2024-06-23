@@ -32,7 +32,7 @@ pipeline {
 
         string(name: 'imageTag', defaultValue: 'latest', description: 'give tag of the image ekl-alpine-jre')
 
-        choice(name: 'buildStage', choicies: ["dev", "test", "prod"]),
+        choice(name: 'buildStage', choices: ["dev", "test", "prod"]),
             description: 'select the stage to be built and deployed, default dev'
     }
 
