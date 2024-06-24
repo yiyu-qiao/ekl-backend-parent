@@ -50,7 +50,8 @@ pipeline {
                         env.imageName = "${registryNamespace}/${registryRepositoryEklAlpineJRE}:${params.imageTag}"
                     } else {
                         echo "Initialize build image ${env.targetEklBackendWS}"
-                        env.imageName = "${registryNamespace}/${registryRepositoryEklBackendWS}:${env.builtTimestamp}"
+                        env.imageTag = ${env.builtTimestamp}
+                        env.imageName = "${registryNamespace}/${registryRepositoryEklBackendWS}:${env.imageTag}"
                     }
                     echo "Initialization for build image ${env.imageName} done."
 
@@ -109,6 +110,7 @@ pipeline {
         stage('Deploy to ekl-k8s'){
             steps {
                 echo "Deploy with kubeconfig ${env.kubeconfig}"
+                sed -i -e "s/{{IMAGE_TAG}/${env.imageTag}/g" ekl-backend-ws/k8s/overlay/${params.buildStage}
                 withKubeConfig([credentialsId: "${env.kubeconfig}"]){
                     sh """
                         export KUBECONFIG=$KUBECONFIG
