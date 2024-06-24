@@ -112,6 +112,7 @@ pipeline {
                 withKubeConfig([credentialsId: "${env.kubeconfig}"]){
                     sh """
                         export KUBECONFIG=$KUBECONFIG
+                        kubectl config view --minify
                         kubectl get all -n ekl-k8s-dev
                         kubectl apply -k ekl-backend-ws/k8s/overlay/${params.buildStage}
                         kubectl get all -n ekl-k8s-dev
