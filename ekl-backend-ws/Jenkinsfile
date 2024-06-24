@@ -65,32 +65,32 @@ pipeline {
             }
         }
 
-        stage('Maven build'){
-            when {
-                equals(actual: params.buildImageTarget, expected: env.targetEklBackendWS)
-            }
-            steps {
-                script {
-                        env.eklBackendWSVersion = sh(returnStdout: true, script: "mvn -f ekl-backend-ws/pom.xml -q help:evaluate -Dexpression=project.version -DforceStdout")
-                        env.artifactEklBackendWS = "ekl-backend-ws-${env.eklBackendWSVersion}.jar"
-                        echo "build artifact ${env.artifactEklBackendWS}"
-                        sh "java -version"
-                        sh "mvn -DskipTests clean package"
-                }
-            }
-        }
+//         stage('Maven build'){
+//             when {
+//                 equals(actual: params.buildImageTarget, expected: env.targetEklBackendWS)
+//             }
+//             steps {
+//                 script {
+//                         env.eklBackendWSVersion = sh(returnStdout: true, script: "mvn -f ekl-backend-ws/pom.xml -q help:evaluate -Dexpression=project.version -DforceStdout")
+//                         env.artifactEklBackendWS = "ekl-backend-ws-${env.eklBackendWSVersion}.jar"
+//                         echo "build artifact ${env.artifactEklBackendWS}"
+//                         sh "java -version"
+//                         sh "mvn -DskipTests clean package"
+//                 }
+//             }
+//         }
 
-        stage('Build Image'){
-            steps {
-                script {
-                        echo "Build docker image ${env.imageName}"
-                        sh """
-                            cd ekl-backend-ws
-                            docker build --target ${params.buildImageTarget} -t ${env.imageName} --build-arg ARTIFACT_EKL_BE_WS_NAME=${env.artifactEklBackendWS} .
-                        """
-                }
-            }
-        }
+//         stage('Build Image'){
+//             steps {
+//                 script {
+//                         echo "Build docker image ${env.imageName}"
+//                         sh """
+//                             cd ekl-backend-ws
+//                             docker build --target ${params.buildImageTarget} -t ${env.imageName} --build-arg ARTIFACT_EKL_BE_WS_NAME=${env.artifactEklBackendWS} .
+//                         """
+//                 }
+//             }
+//         }
 
 //         stage('Push Image'){
 //             steps {
