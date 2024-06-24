@@ -112,6 +112,7 @@ pipeline {
                 withKubeConfig([credentialsId: 'EKL_K8S_ADMIN']){
                     sh """
                         echo $KUBECONFIG
+                        cat $KUBECONFIG
                         kubectl get all -n ekl-k8s-dev
                         kubectl apply -k ekl-backend-ws/k8s/overlay/${params.buildStage}
                         kubectl get all -n ekl-k8s-dev
