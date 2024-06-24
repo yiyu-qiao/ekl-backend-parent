@@ -57,7 +57,7 @@ pipeline {
                         echo "Initialize build image ${env.targetEklBackendWS}"
 
                         env.imageTag = "${env.builtTimestamp}"
-                        imageRepo = getImageRepository(${params.buildStage})
+                        imageRepo = getImageRepository("${params.buildStage}")
                         env.imageName = "${env.registryNamespace}/${imageRepo}:${env.imageTag}"
                     }
                     echo "Initialization for build image ${env.imageName} done."
