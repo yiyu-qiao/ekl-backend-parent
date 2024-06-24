@@ -73,6 +73,9 @@ pipeline {
                         env.imageName = "${env.registryNamespace}/${imageRepo}:${env.imageTag}"
                     }
                     echo "Initialization for build image ${env.imageName} done."
+
+                    env.kubeconfig = getKubeconfig("${params.buildStage}")
+                    echo "Use kubeconfig ${env.kubeconfig}"
                 }
             }
         }
@@ -120,9 +123,8 @@ pipeline {
 
         stage('Deploy to ekl-k8s'){
             steps {
-                kubeconfig = getKubeconfig("${params.buildStage}")
-                echo "Deploy with kubeconfig ${kubeconfig}"
-                withKubeConfig([credentialsId: "${kubeconfig}"]){
+                echo "Deploy with kubeconfig ${env.kubeconfig}"
+                withKubeConfig([credentialsId: "${env.kubeconfig}"]){
                     sh """
                         sed -i -e 's/{{IMAGE_TAG}}/${env.imageTag}/g' \
                           ekl-backend-ws/k8s/overlay/${params.buildStage}/kustomization.yaml
