@@ -109,7 +109,7 @@ pipeline {
         stage('Deploy to ekl-k8s'){
             steps {
                 echo "Deploy with kubeconfig ${env.kubeconfig}"
-                withKubeConfig([credentialsId: "${env.kubeconfig}"]){
+                withKubeConfig([credentialsId: 'SA_JENKINS_EKL_K8S_DEV']){
                     sh """
                         kubectl config view
                         kubectl config view --minify
