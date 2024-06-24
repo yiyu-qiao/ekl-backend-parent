@@ -65,46 +65,46 @@ pipeline {
             }
         }
 
-//         stage('Maven build'){
-//             when {
-//                 equals(actual: params.buildImageTarget, expected: env.targetEklBackendWS)
-//             }
-//             steps {
-//                 script {
-//                         env.eklBackendWSVersion = sh(returnStdout: true, script: "mvn -f ekl-backend-ws/pom.xml -q help:evaluate -Dexpression=project.version -DforceStdout")
-//                         env.artifactEklBackendWS = "ekl-backend-ws-${env.eklBackendWSVersion}.jar"
-//                         echo "build artifact ${env.artifactEklBackendWS}"
-//                         sh "java -version"
-//                         sh "mvn -DskipTests clean package"
-//                 }
-//             }
-//         }
+        stage('Maven build'){
+            when {
+                equals(actual: params.buildImageTarget, expected: env.targetEklBackendWS)
+            }
+            steps {
+                script {
+                        env.eklBackendWSVersion = sh(returnStdout: true, script: "mvn -f ekl-backend-ws/pom.xml -q help:evaluate -Dexpression=project.version -DforceStdout")
+                        env.artifactEklBackendWS = "ekl-backend-ws-${env.eklBackendWSVersion}.jar"
+                        echo "build artifact ${env.artifactEklBackendWS}"
+                        sh "java -version"
+                        sh "mvn -DskipTests clean package"
+                }
+            }
+        }
 
-//         stage('Build Image'){
-//             steps {
-//                 script {
-//                         echo "Build docker image ${env.imageName}"
-//                         sh """
-//                             cd ekl-backend-ws
-//                             docker build --target ${params.buildImageTarget} -t ${env.imageName} --build-arg ARTIFACT_EKL_BE_WS_NAME=${env.artifactEklBackendWS} .
-//                         """
-//                 }
-//             }
-//         }
+        stage('Build Image'){
+            steps {
+                script {
+                        echo "Build docker image ${env.imageName}"
+                        sh """
+                            cd ekl-backend-ws
+                            docker build --target ${params.buildImageTarget} -t ${env.imageName} --build-arg ARTIFACT_EKL_BE_WS_NAME=${env.artifactEklBackendWS} .
+                        """
+                }
+            }
+        }
 
-//         stage('Push Image'){
-//             steps {
-//                 echo "Push image ${env.imageName} to Docker Hub"
-//                 script {
-//                     docker.withRegistry('','DOCKERHUB_TOKEN_PONYWORLD') {
-//                         sh """
-//                             docker push ${env.imageName}
-//                             docker image rm ${env.imageName}
-//                         """
-//                     }
-//                 }
-//             }
-//         }
+        stage('Push Image'){
+            steps {
+                echo "Push image ${env.imageName} to Docker Hub"
+                script {
+                    docker.withRegistry('','DOCKERHUB_TOKEN_PONYWORLD') {
+                        sh """
+                            docker push ${env.imageName}
+                            docker image rm ${env.imageName}
+                        """
+                    }
+                }
+            }
+        }
 
         stage('Deploy to ekl-k8s'){
             steps {
@@ -112,8 +112,6 @@ pipeline {
                 withKubeConfig([credentialsId: "${env.kubeconfig}"]){
                     sh """
                         export KUBECONFIG=$KUBECONFIG
-                        kubectl config view --minify
-                        kubectl get all -n ekl-k8s-dev
                         kubectl apply -k ekl-backend-ws/k8s/overlay/${params.buildStage}
                         kubectl get all -n ekl-k8s-dev
                     """
