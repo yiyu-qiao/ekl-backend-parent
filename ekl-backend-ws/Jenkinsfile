@@ -106,7 +106,7 @@ pipeline {
             }
         }
 
-        stage("Deploy to ekl-k8s-${params.buildStage}"){
+        stage('Deploy to ekl-k8s'){
             steps {
                 echo "Deploy with kubeconfig ${env.kubeconfig}"
                 withKubeConfig([credentialsId: "${env.kubeconfig}"]){
