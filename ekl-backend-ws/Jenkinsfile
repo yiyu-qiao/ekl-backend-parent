@@ -24,6 +24,8 @@ pipeline {
         builtTimestamp= sh(returnStdout:true, script:"date +%Y%m%dT%H%M%S").trim() //remove trailing newline
         targetEklAlpineJRE = 'ekl-alpine-jre'
         targetEklBackendWS = 'ekl-backend-ws'
+        saK8sDev = 'SA_JENKINS_EKL_K8S_DEV'
+        saK8sTest = 'SA_JENKINS_EKL_K8S_TEST'
     }
 
     parameters {
@@ -51,6 +53,14 @@ pipeline {
                         env.imageName = "${registryNamespace}/${registryRepositoryEklBackendWS}:${env.builtTimestamp}"
                     }
                     echo "Initialization for build image ${env.imageName} done."
+
+                    echo "Initialize build image for stage ${params.buildStage}"
+                    if(params.buildStage == 'dev'){
+                        env.kubeconfig = ${env.saK8sDev}
+                    } else if (params.buildStage == 'test'){
+                        env.kubeconfig = ${env.saK8sTest}
+                    }
+                    echo "Use Kubeconfig ${env.kubeconfig}"
                 }
             }
         }
@@ -98,7 +108,7 @@ pipeline {
 
         stage('Deploy to ekl-k8s-${params.buildStage}'){
             steps {
-                withKubeConfig([credentialsId: 'EKL_K8S_ADMIN']){
+                withKubeConfig([credentialsId: "${env.kubeconfig}"]){
                     sh """
                         pwd
                         ls -la
