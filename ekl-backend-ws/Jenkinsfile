@@ -92,19 +92,19 @@ pipeline {
             }
         }
 
-        stage('Push Image'){
-            steps {
-                echo "Push image ${env.imageName} to Docker Hub"
-                script {
-                    docker.withRegistry('','DOCKERHUB_TOKEN_PONYWORLD') {
-                        sh """
-                            docker push ${env.imageName}
-                            docker image rm ${env.imageName}
-                        """
-                    }
-                }
-            }
-        }
+//         stage('Push Image'){
+//             steps {
+//                 echo "Push image ${env.imageName} to Docker Hub"
+//                 script {
+//                     docker.withRegistry('','DOCKERHUB_TOKEN_PONYWORLD') {
+//                         sh """
+//                             docker push ${env.imageName}
+//                             docker image rm ${env.imageName}
+//                         """
+//                     }
+//                 }
+//             }
+//         }
 
         stage('Deploy to ekl-k8s'){
             steps {
