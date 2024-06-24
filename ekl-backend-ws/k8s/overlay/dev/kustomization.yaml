@@ -13,5 +13,5 @@ patches:
   - path: service-dev.yaml
 images:
   - name: ekl-backend-ws
-    newName: ponyworld/ekl-backend-ws
+    newName: ponyworld/ekl-backend-ws-dev
     newTag: {{IMAGE_TAG}}
