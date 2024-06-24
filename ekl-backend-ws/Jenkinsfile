@@ -56,9 +56,9 @@ pipeline {
 
                     echo "Initialize build image for stage ${params.buildStage}"
                     if(params.buildStage == 'dev'){
-                        env.kubeconfig = ${env.saK8sDev}
+                        env.kubeconfig = "${env.saK8sDev}"
                     } else if (params.buildStage == 'test'){
-                        env.kubeconfig = ${env.saK8sTest}
+                        env.kubeconfig = "${env.saK8sTest}"
                     }
                     echo "Use Kubeconfig ${env.kubeconfig}"
                 }
