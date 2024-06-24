@@ -19,7 +19,8 @@ pipeline {
 
     environment {
         registryNamespace = 'ponyworld'
-        registryRepositoryEklBackendWS = 'ekl-backend-ws'
+        registryRepositoryEklBackendWSDev = 'ekl-backend-ws-dev'
+        registryRepositoryEklBackendWSTest = 'ekl-backend-ws-test'
         registryRepositoryEklAlpineJRE = 'ekl-alpine-jre-21'
         builtTimestamp= sh(returnStdout:true, script:"date +%Y%m%dT%H%M%S").trim() //remove trailing newline
         targetEklAlpineJRE = 'ekl-alpine-jre'
@@ -50,8 +51,9 @@ pipeline {
                         env.imageName = "${registryNamespace}/${registryRepositoryEklAlpineJRE}:${params.imageTag}"
                     } else {
                         echo "Initialize build image ${env.targetEklBackendWS}"
+
                         env.imageTag = "${env.builtTimestamp}"
-                        env.imageName = "${registryNamespace}/${registryRepositoryEklBackendWS}:${env.imageTag}"
+                        env.imageName = "${registryNamespace}/${registryRepositoryEklBackendWSDev}:${env.imageTag}"
                     }
                     echo "Initialization for build image ${env.imageName} done."
 
