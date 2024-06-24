@@ -123,38 +123,5 @@ pipeline {
                 }
             }
         }
-//         stage('Deploy to Artifactory'){
-//             steps {
-//                 withCredentials([string(credentialsId: 'Artifactory_Access_Token_QiaoHanDev', variable: 'ARTIFACTORY_TOKEN')]){
-//                     sh """
-//                         #!/usr/bin/bash
-//                         source ./script/upload-to-artifactory.sh
-//                     """
-//                 }
-//             }
-//         }
-        
-//         stage('Deploy ekl-backend-ws'){
-//             steps {
-//                 //withCredentials([usernamePassword(credentialsId:'SSH_Jenkins_User', usernameVariable: 'username', passwordVariable: 'password')]){
-//                     script {
-//                         def remote_ekl_backend = [:]
-//                         remote_ekl_backend.name = remote_ekl_backend_name
-//                         remote_ekl_backend.host = remote_ekl_backend_host
-//                         remote_ekl_backend.allowAnyHosts = true
-//                         remote_ekl_backend.user = remote_ekl_backend_username
-//                         remote_ekl_backend.password = remote_ekl_backend_password
-//                         sshCommand remote: remote_ekl_backend, command: 'hostname'
-//                         sshCommand remote: remote_ekl_backend, command: 'ls -la'
-//                         sshScript remote: remote_ekl_backend, script: 'script/stop-ekl-backend.sh'
-//                         sshPut remote: remote_ekl_backend, from: 'target/ekl-backend-0.0.1-SNAPSHOT.jar', into: "${path_ekl_backend_artefact}/"
-//                         sshCommand remote: remote_ekl_backend, command: "ls -la ${path_ekl_backend_artefact}/ekl-backend-0.0.1-SNAPSHOT.jar"
-//                         sshPut remote: remote_ekl_backend, from: 'script/start-ekl-backend.sh', into: "${path_ekl_backend_artefact}/script/"
-//                         sshCommand remote: remote_ekl_backend, command: "chmod u+x ${path_ekl_backend_artefact}/script/start-ekl-backend.sh"
-//                         sshScript remote: remote_ekl_backend, script: 'script/start-silent-ekl-backend.sh'
-//                     }
-//                 //}
-//             }
-//         }
     }
 }
