@@ -50,7 +50,7 @@ pipeline {
                         env.imageName = "${registryNamespace}/${registryRepositoryEklAlpineJRE}:${params.imageTag}"
                     } else {
                         echo "Initialize build image ${env.targetEklBackendWS}"
-                        env.imageTag = ${env.builtTimestamp}
+                        env.imageTag = "${env.builtTimestamp}"
                         env.imageName = "${registryNamespace}/${registryRepositoryEklBackendWS}:${env.imageTag}"
                     }
                     echo "Initialization for build image ${env.imageName} done."
