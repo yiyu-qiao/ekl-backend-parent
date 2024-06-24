@@ -6,7 +6,9 @@ def eklBackendWSVersion
 def artifactEklBackendWS
 
 def getImageRepository(String buildStage) {
-    return 'ekl-backend-ws-dev'
+    if(buildStage == 'dev') {
+        return 'ekl-backend-ws-dev'
+    }
 }
 
 pipeline {
