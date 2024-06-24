@@ -112,7 +112,7 @@ pipeline {
                 echo "Deploy with kubeconfig ${env.kubeconfig}"
                 withKubeConfig([credentialsId: "${env.kubeconfig}"]){
                     sh """
-                        sed -i -e "s/{{IMAGE_TAG}/${env.imageTag}/g" ekl-backend-ws/k8s/overlay/${params.buildStage}
+                        sed -i -e 's/{{IMAGE_TAG}}/\${env.imageTag}/g' ekl-backend-ws/k8s/overlay/${params.buildStage}
                         export KUBECONFIG=$KUBECONFIG
                         kubectl apply -k ekl-backend-ws/k8s/overlay/${params.buildStage}
                         kubectl get all -n ekl-k8s-dev
