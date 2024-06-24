@@ -111,6 +111,7 @@ pipeline {
                 echo "Deploy with kubeconfig ${env.kubeconfig}"
                 withKubeConfig([credentialsId: "${env.kubeconfig}"]){
                     sh """
+                        kubectl config view
                         kubectl config view --minify
                         kubectl apply -k ekl-backend-ws/k8s/overlay/${params.buildStage}
                         kubectl get all -n ekl-k8s-dev
