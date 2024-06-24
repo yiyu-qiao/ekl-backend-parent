@@ -5,6 +5,10 @@ def imageName
 def eklBackendWSVersion
 def artifactEklBackendWS
 
+def getImageRepository(String buildStage) {
+    return 'ekl-backend-ws-dev'
+}
+
 pipeline {
     agent any
 
@@ -53,7 +57,8 @@ pipeline {
                         echo "Initialize build image ${env.targetEklBackendWS}"
 
                         env.imageTag = "${env.builtTimestamp}"
-                        env.imageName = "${registryNamespace}/${registryRepositoryEklBackendWSDev}:${env.imageTag}"
+                        imageRepo = getImageRepository(${params.buildStage})
+                        env.imageName = "${env.registryNamespace}/${imageRepo}:${env.imageTag}"
                     }
                     echo "Initialization for build image ${env.imageName} done."
 
