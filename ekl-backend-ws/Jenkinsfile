@@ -8,6 +8,20 @@ def artifactEklBackendWS
 def getImageRepository(String buildStage) {
     if(buildStage == 'dev') {
         return 'ekl-backend-ws-dev'
+    }else if(buildStage == 'test') {
+        return 'ekl-backend-ws-test'
+    }else {
+        return ''
+    }
+}
+
+def getKubeconfig(String buildStage){
+    if(buildStage == 'dev') {
+        return 'SA_JENKINS_EKL_K8S_DEV'
+    }else if(buildStage == 'test'){
+        return 'SA_JENKINS_EKL_K8S_TEST'
+    }else {
+        return ''
     }
 }
 
@@ -25,14 +39,10 @@ pipeline {
 
     environment {
         registryNamespace = 'ponyworld'
-        registryRepositoryEklBackendWSDev = 'ekl-backend-ws-dev'
-        registryRepositoryEklBackendWSTest = 'ekl-backend-ws-test'
         registryRepositoryEklAlpineJRE = 'ekl-alpine-jre-21'
         builtTimestamp= sh(returnStdout:true, script:"date +%Y%m%dT%H%M%S").trim() //remove trailing newline
         targetEklAlpineJRE = 'ekl-alpine-jre'
         targetEklBackendWS = 'ekl-backend-ws'
-        saK8sDev = 'SA_JENKINS_EKL_K8S_DEV'
-        saK8sTest = 'SA_JENKINS_EKL_K8S_TEST'
     }
 
     parameters {
@@ -63,14 +73,6 @@ pipeline {
                         env.imageName = "${env.registryNamespace}/${imageRepo}:${env.imageTag}"
                     }
                     echo "Initialization for build image ${env.imageName} done."
-
-                    echo "Initialize build image for stage ${params.buildStage}"
-                    if(params.buildStage == 'dev'){
-                        env.kubeconfig = "${env.saK8sDev}"
-                    } else if (params.buildStage == 'test'){
-                        env.kubeconfig = "${env.saK8sTest}"
-                    }
-                    echo "Use Kubeconfig ${env.kubeconfig}"
                 }
             }
         }
@@ -118,8 +120,9 @@ pipeline {
 
         stage('Deploy to ekl-k8s'){
             steps {
-                echo "Deploy with kubeconfig ${env.kubeconfig}"
-                withKubeConfig([credentialsId: "${env.kubeconfig}"]){
+                kubeconfig = getKubeconfig("${params.buildStage}")
+                echo "Deploy with kubeconfig ${kubeconfig}"
+                withKubeConfig([credentialsId: "${kubeconfig}"]){
                     sh """
                         sed -i -e 's/{{IMAGE_TAG}}/${env.imageTag}/g' \
                           ekl-backend-ws/k8s/overlay/${params.buildStage}/kustomization.yaml
