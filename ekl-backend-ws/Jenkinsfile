@@ -113,6 +113,8 @@ pipeline {
                     sh """
                         echo $KUBECONFIG
                         cat $KUBECONFIG
+                        export KUBECONFIG=$KUBECONFIG
+                        kubectl get all -n ekl-k8s-dev
                         kubectl --kubeconfig $KUBECONFIG get all -n ekl-k8s-dev
                         kubectl --kubeconfig $KUBECONFIG apply -k ekl-backend-ws/k8s/overlay/${params.buildStage}
                         kubectl --kubeconfig $KUBECONFIG get all -n ekl-k8s-dev
