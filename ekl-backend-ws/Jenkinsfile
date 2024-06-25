@@ -86,7 +86,8 @@ pipeline {
             }
             steps {
                 script {
-                        env.eklBackendWSVersion = sh(returnStdout: true, script: "mvn -f ekl-backend-ws/pom.xml -q help:evaluate -Dexpression=project.version -DforceStdout")
+                        env.eklBackendWSVersion = sh(returnStdout: true, script: "mvn -f ekl-backend-ws/pom.xml \
+                            -q help:evaluate -Dexpression=project.version -DforceStdout")
                         env.artifactEklBackendWS = "ekl-backend-ws-${env.eklBackendWSVersion}.jar"
                         echo "build artifact ${env.artifactEklBackendWS}"
                         sh "java -version"
@@ -101,7 +102,8 @@ pipeline {
                         echo "Build docker image ${env.imageName}"
                         sh """
                             cd ekl-backend-ws
-                            docker build --target ${params.buildImageTarget} -t ${env.imageName} --build-arg ARTIFACT_EKL_BE_WS_NAME=${env.artifactEklBackendWS} .
+                            docker build --target ${params.buildImageTarget} -t ${env.imageName} \
+                                --build-arg ARTIFACT_EKL_BE_WS_NAME=${env.artifactEklBackendWS} .
                         """
                 }
             }
@@ -127,7 +129,7 @@ pipeline {
                 withKubeConfig([credentialsId: "${env.kubeconfig}"]){
                     sh """
                         sed -i -e 's/{{IMAGE_TAG}}/${env.imageTag}/g' \
-                          ekl-backend-ws/k8s/overlay/${params.buildStage}/kustomization.yaml
+                            ekl-backend-ws/k8s/overlay/${params.buildStage}/kustomization.yaml
                         export KUBECONFIG=$KUBECONFIG
                         kubectl apply -k ekl-backend-ws/k8s/overlay/${params.buildStage}
                         kubectl rollout status -k ekl-backend-ws/k8s/overlay/${params.buildStage}
