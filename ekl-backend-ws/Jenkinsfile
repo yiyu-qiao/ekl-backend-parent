@@ -132,7 +132,7 @@ pipeline {
                             ekl-backend-ws/k8s/overlay/${params.buildStage}/kustomization.yaml
                         export KUBECONFIG=$KUBECONFIG
                         kubectl apply -k ekl-backend-ws/k8s/overlay/${params.buildStage}
-                        kubectl rollout status -k ekl-backend-ws/k8s/overlay/${params.buildStage}
+                        kubectl rollout status deployment/ekl-backend-ws-${params.buildStage}
                         kubectl get all -n ekl-k8s-dev
                     """
                 }
