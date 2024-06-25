@@ -130,7 +130,7 @@ pipeline {
                           ekl-backend-ws/k8s/overlay/${params.buildStage}/kustomization.yaml
                         export KUBECONFIG=$KUBECONFIG
                         kubectl apply -k ekl-backend-ws/k8s/overlay/${params.buildStage}
-                        kubectl wait --for=condition=Ready deployment/ekl-backend-ws-dev --timeout=120
+                        kubectl wait --for=condition=Ready deployment/ekl-backend-ws-dev --timeout=120s
                         kubectl get all -n ekl-k8s-dev
                     """
                 }
