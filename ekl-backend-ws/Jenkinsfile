@@ -129,7 +129,7 @@ pipeline {
                         sed -i -e 's/{{IMAGE_TAG}}/${env.imageTag}/g' \
                           ekl-backend-ws/k8s/overlay/${params.buildStage}/kustomization.yaml
                         export KUBECONFIG=$KUBECONFIG
-                        kubectl apply -k ekl-backend-ws/k8s/overlay/${params.buildStage} --wait=true
+                        kubectl apply --wait=true -k ekl-backend-ws/k8s/overlay/${params.buildStage}
                         kubectl get all -n ekl-k8s-dev
                     """
                 }
