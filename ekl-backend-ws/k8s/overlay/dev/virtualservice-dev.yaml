@@ -15,7 +15,7 @@ spec:
               number: 8080
   tls:
     - match:
-      - port: 443
+      - port: 8443
         sniHosts:
           - ekl-backend-ws-dev.ponyworld.io
       route:
