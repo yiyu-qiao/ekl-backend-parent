@@ -11,5 +11,5 @@ spec:
     - route:
         - destination:
             host: ekl-backend-ws
-            port: 8080
+            port: 8443
       timeout: 60s

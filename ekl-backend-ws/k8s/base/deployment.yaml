@@ -16,7 +16,7 @@ spec:
           image: ekl-backend-ws
           imagePullPolicy: Always
           ports:
-            - containerPort: 8080
+            - containerPort: 8443
               protocol: TCP
           envFrom:
             - configMapRef:
