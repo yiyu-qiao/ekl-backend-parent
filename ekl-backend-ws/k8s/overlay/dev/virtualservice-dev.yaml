@@ -11,4 +11,4 @@ spec:
     - route:
         - destination:
             host: ekl-backend-ws-dev.ekl-k8s-dev.svc.cluster.local
-            port: 8443
+            port: "8443"
