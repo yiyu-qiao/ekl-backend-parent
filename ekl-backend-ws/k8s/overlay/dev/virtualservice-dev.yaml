@@ -7,8 +7,17 @@ spec:
     - ekl-backend-ws-dev.ponyworld.io
   gateways:
     - ekl-backend-ws-dev
+  http:
+    - route:
+        - destination:
+            host: ekl-backend-ws-dev.ekl-k8s-dev.svc.cluster.local
   tls:
     - match:
+      - port: 443
+        sniHosts:
+          - ekl-backend-ws-dev.ponyworld.io
       route:
       - destination:
           host: ekl-backend-ws-dev.ekl-k8s-dev.svc.cluster.local
+          port:
+            number: 8443
