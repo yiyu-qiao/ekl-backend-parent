@@ -13,3 +13,8 @@ spec:
             host: ekl-backend-ws-dev.ekl-k8s-dev.svc.cluster.local
             port:
               number: 8080
+  tls:
+    - match:
+      - port: 443
+        sniHosts:
+          - ekl-backend-ws-dev.ponyworld.io
