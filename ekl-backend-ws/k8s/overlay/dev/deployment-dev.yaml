@@ -16,4 +16,7 @@ spec:
         - name: ekl-backend-ws-jks
           secret:
             secretName: jks-ekl-backend-ws-dev
+            items:
+              - key: EKL_BACKEND_WS_JKS
+                path: ekl-backend-ws-dev.jks
   replicas: 1
