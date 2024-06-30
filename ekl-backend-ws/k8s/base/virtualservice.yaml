@@ -7,3 +7,9 @@ spec:
     - ekl-backend-ws.ponyworld.io
   gateways:
     - ekl-backend-ws
+  http:
+    - route:
+        - destination:
+            host: ekl-backend-ws
+            port: 8080
+      timeout: 60s
