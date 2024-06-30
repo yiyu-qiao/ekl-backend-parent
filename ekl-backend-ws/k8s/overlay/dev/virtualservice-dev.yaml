@@ -9,7 +9,7 @@ spec:
     - ekl-backend-ws-dev
   http:
     - match:
-        port:80
+        port: 80
       route:
       - destination:
           host: ekl-backend-ws-dev.ekl-k8s-dev.svc.cluster.local
