@@ -23,6 +23,13 @@ spec:
                 name: ekl-backend-ws
             - secretRef:
                 name: ekl-backend-ws
+          volumeMounts:
+            - mountPath: /var/local/ekl-backend-ws/
+              name: ekl-backend-ws-jks
+      volumes:
+        - name: ekl-backend-ws-jks
+          secret:
+            secretName: jks-ekl-backend-ws
   replicas: 2
   strategy:
     type: RollingUpdate

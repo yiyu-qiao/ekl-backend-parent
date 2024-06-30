@@ -12,4 +12,8 @@ spec:
                 name: ekl-backend-ws-dev
             - secretRef:
                 name: ekl-backend-ws-dev
+      volumes:
+        - name: ekl-backend-ws-jks
+          secret:
+            secretName: jks-ekl-backend-ws-dev
   replicas: 1
