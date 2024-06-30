@@ -14,4 +14,4 @@ patches:
 images:
   - name: ekl-backend-ws
     newName: ponyworld/ekl-backend-ws-dev
-    newTag: {{IMAGE_TAG}}
+    newTag: 20240630T202207
