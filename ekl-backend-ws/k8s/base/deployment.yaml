@@ -20,21 +20,9 @@ spec:
               protocol: TCP
             - containerPort: 8080
               protocol: TCP
-          envFrom:
-            - configMapRef:
-                name: ekl-backend-ws
-            - secretRef:
-                name: ekl-backend-ws
           volumeMounts:
             - mountPath: /var/local/ekl-backend-ws/
               name: ekl-backend-ws-jks
-      volumes:
-        - name: ekl-backend-ws-jks
-          secret:
-            secretName: jks-ekl-backend-ws
-            items:
-              - key: EKL_BACKEND_WS_JKS
-                path: ekl-backend-ws-jks
   replicas: 2
   strategy:
     type: RollingUpdate
