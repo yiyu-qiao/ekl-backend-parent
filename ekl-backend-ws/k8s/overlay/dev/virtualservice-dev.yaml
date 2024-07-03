@@ -8,7 +8,7 @@ spec:
   http:
     - route:
         - destination:
-            host: ekl-backend-ws-dev.ekl-k8s-dev.svc.cluster.local
+            host: ekl-backend-ws-dev.ekl-dev.svc.cluster.local
             port:
               number: 8080
       timeout: 60s
@@ -19,6 +19,6 @@ spec:
           - ekl-backend-ws-dev.ponyworld.io
       route:
         - destination:
-            host: ekl-backend-ws-dev.ekl-k8s-dev.svc.cluster.local
+            host: ekl-backend-ws-dev.ekl-dev.svc.cluster.local
             port:
               number: 8443

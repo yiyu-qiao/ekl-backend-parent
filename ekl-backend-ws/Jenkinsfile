@@ -17,9 +17,9 @@ def getImageRepository(String buildStage) {
 
 def getKubeconfig(String buildStage){
     if(buildStage == 'dev') {
-        return 'SA_JENKINS_EKL_K8S_DEV'
+        return 'SA_EKL_DEV_JENKINS'
     }else if(buildStage == 'test'){
-        return 'SA_JENKINS_EKL_K8S_TEST'
+        return 'SA_EKL_TEST_JENKINS'
     }else {
         return ''
     }

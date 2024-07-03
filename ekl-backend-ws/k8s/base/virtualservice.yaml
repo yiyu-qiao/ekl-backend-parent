@@ -4,4 +4,4 @@ metadata:
   name: ekl-backend-ws
 spec:
   gateways:
-    - istio-system/ekl-k8s-gateway
+    - ekl-istio-system/ekl-istio-default-gateway
