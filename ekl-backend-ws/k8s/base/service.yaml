@@ -10,7 +10,3 @@ spec:
       name: https
       targetPort: 8443
       protocol: TCP
-    - port: 8080
-      name: http
-      targetPort: 8080
-      protocol: TCP

@@ -5,13 +5,6 @@ metadata:
 spec:
   hosts:
     - ekl-backend-ws-dev.ponyworld.io
-  http:
-    - route:
-        - destination:
-            host: ekl-backend-ws-dev.ekl-dev.svc.cluster.local
-            port:
-              number: 8080
-      timeout: 60s
   tls:
     - match:
       - port: 443
