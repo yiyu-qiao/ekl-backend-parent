@@ -21,7 +21,7 @@ public class UserController {
 
     private JWTValidator jwtValidator = new JWTValidator();
 
-    @GetMapping(path = "/api/user/{username}")
+    @GetMapping(path = "/api/user/find/{username}")
 //    @PreAuthorize("hasRole(USER)")
     public ResponseEntity<?> getUserDetail(@PathVariable String username) throws UserNotFoundException {
         var user = userService.getUserByUsername(username);
@@ -46,8 +46,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-   @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    @GetMapping(value = "/api/user/all",produces = MediaType.APPLICATION_JSON_VALUE)
+//   @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    @GetMapping(value = "/api/user/list-all",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllUser(){
         var listUsers = userService.findAll();
         return ResponseEntity.ok().body(listUsers);
