@@ -2,6 +2,7 @@ package org.ekl.backend.ws.api.user;
 
 import org.ekl.backend.ws.api.user.repository.UserRepository;
 import org.ekl.backend.ws.exception.UserNotFoundException;
+import org.ekl.backend.ws.model.Role;
 import org.ekl.backend.ws.model.User;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.InjectSoftAssertions;
@@ -15,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.mockito.Mockito.*;
@@ -41,6 +44,10 @@ class UserServiceTest {
         //given
         var user = new User();
         user.setUsername("test-user");
+        var role = new Role();
+        role.setName("Admin");
+        List<Role> roles = Arrays.asList(role);
+        user.setRoles(roles);
         when(userRepository.findByUsername(any())).thenReturn(Collections.singletonList(user));
 
         //when
