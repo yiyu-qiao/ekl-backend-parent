@@ -34,10 +34,8 @@ class UserServiceIntegrationsTest {
         String testUserName = "test_user1";
         String passwd = "1234";
         var listUserFound =userRepository.findByUsername(testUserName);
-        if(!listUserFound.isEmpty()){
-            for(User currentUser: listUserFound){
-                userRepository.deleteById(currentUser.getId());
-            }
+        if(listUserFound != null){
+            userRepository.deleteById(listUserFound.getId());
         }
         var testUser = new User();
         testUser.setUsername(testUserName);

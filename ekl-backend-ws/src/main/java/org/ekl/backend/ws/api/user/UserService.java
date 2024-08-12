@@ -14,25 +14,24 @@ import java.util.List;
 @Service
 @Slf4j
 public class UserService {
-
     @Autowired
     private UserRepository userRepository;
 
     public User getUserByUsername(String username) throws UserNotFoundException {
-        List<User> users = userRepository.findByUsername(username);
-        if(users.isEmpty()){
+        User user = userRepository.findByUsername(username);
+        if(user == null){
             throw new UserNotFoundException(String.format("Not found user with Id[%s]",username));
         }
-        var roles = users.get(0).getRoles();
+        var roles = user.getRoles();
         for (Role role : roles) {
             log.info("role : {}" ,role.getDescription());
         }
-        return users.get(0);
+        return user;
     }
 
     public boolean checkUserExistence(String username){
-        List<User> users = userRepository.findByUsername(username);
-        if(!users.isEmpty()){
+        User user = userRepository.findByUsername(username);
+        if(user != null){
             return true;
         }
         return false;
