@@ -8,6 +8,10 @@ spec:
       app: ekl-backend-ws
   template:
     metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/port: "8080"
       labels:
         app: ekl-backend-ws
     spec:
