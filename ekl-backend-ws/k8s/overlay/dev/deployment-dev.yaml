@@ -19,4 +19,4 @@ spec:
             items:
               - key: EKL_BACKEND_WS_JKS
                 path: ekl-backend-ws-dev.jks
-  replicas: 1
+  replicas: 2
