@@ -27,9 +27,10 @@ public class JWTProvider {
     public String createJWT (User user){
         Assert.notNull(user, "User muss not be null for creation JWT");
         Assert.notNull(user.getUsername(), "User name muss not be null for creation JWT");
-        Claims claims = Jwts.claims();
-        claims.setIssuer("EKL JWT Provider");
-        claims.setSubject(user.getUsername());
+        Claims claims = Jwts.claims()
+                .issuer("EKL JWT Provider")
+                .subject(user.getUsername())
+                .build();
         if(!user.getRoles().isEmpty()) {
             StringBuilder roles = new StringBuilder();
             roles.append(user.getRoles().get(0));
