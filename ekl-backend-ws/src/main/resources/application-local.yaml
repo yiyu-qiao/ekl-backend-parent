@@ -1,0 +1,68 @@
+# Spring Boot Configuration - Local Profile
+
+# JDBC Configuration
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: ${EKL_BACKEND_DB_URL}
+    username: ${EKL_BACKEND_DB_USER}
+    password: ${EKL_BACKEND_DB_PWD}
+
+  # JPA Configuration
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    defer-datasource-initialization: true
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+        format_sql: true
+        #validator:
+        #  apply_to_ddl: false
+        #check_nullability: true
+  security:
+    oauth2:
+      client:
+        registration:
+          authcode:
+            client-id: mcp-client
+            client-secret: mcp-secret
+            authorization-grant-type: authorization_code
+            scope:
+              - openid
+              - profile
+              - email
+            provider: local-oauth-server
+        provider:
+          local-oauth-server:
+            # Manuelle Konfiguration ohne issuer-uri - volle Kontrolle, kein auto-discovery
+#            authorization-uri: http://localhost:9000/oauth2/authorize
+#            token-uri: http://localhost:9000/oauth2/token
+#            jwk-set-uri: http://localhost:9000/oauth2/jwks
+            # user-info-uri BEWUSST NICHT angegeben - verwendet nur ID Token
+            # issuer-uri NICHT verwenden - würde userinfo-uri auto-discovery triggern
+            issuer-uri: http://localhost:9000
+
+# Logging Configuration
+logging:
+  level:
+    org:
+      springframework:
+        security: TRACE
+#      hibernate:
+#        SQL: DEBUG
+        #type.descriptor.sql: trace
+
+
+# TLS Configuration (disabled for local development)
+#server:
+#  port: 8443
+#  ssl:
+#    key-store: ${EKL_BACKEND_WS_KEYSTORE_PATH}
+#    key-store-password: ${EKL_BACKEND_WS_KEYSTORE_PASSWORD}
+#    enabled-protocols: TLSv1.2,TLSv1.3
+

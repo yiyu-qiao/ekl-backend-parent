@@ -6,9 +6,11 @@ import org.ekl.backend.ws.token.JWTProvider;
 import org.ekl.backend.ws.token.JWTValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,6 +20,9 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -28,7 +33,7 @@ public class EklSecurityConfiguration {
     public SecurityFilterChain securityConfigure(HttpSecurity http) throws Exception {
         var rst = http.authorizeHttpRequests(request -> {
                     request.requestMatchers("/api/auth/login").permitAll();
-//                    request.requestMatchers("/api/**").authenticated();
+                    request.requestMatchers("/api/**").authenticated();
                     request.anyRequest().permitAll();
                 })
 //                .formLogin(configurer -> {
@@ -38,6 +43,18 @@ public class EklSecurityConfiguration {
 //                    configurer.loginPage("/login");
 //                })
 //                .httpBasic(Customizer.withDefaults())
+//                .oauth2Login(oauth2 -> oauth2
+//                        .loginPage("/oauth2/authorization/authcode")
+//                        .defaultSuccessUrl("/api/user/profile", true)
+//                )
+                .oauth2Login(Customizer.withDefaults())
+                .oauth2Client(Customizer.withDefaults())
+                .exceptionHandling(exceptions -> exceptions
+                        .defaultAuthenticationEntryPointFor(
+                            new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED), // Sendet 401
+                            PathPatternRequestMatcher.withDefaults().matcher("/api/**") // Gilt nur für API
+                        )
+                )
                 .addFilterBefore(createTokenAuthenticationFilter(), AnonymousAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
                 .build();
