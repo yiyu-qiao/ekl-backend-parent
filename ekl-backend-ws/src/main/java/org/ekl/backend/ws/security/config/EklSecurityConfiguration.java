@@ -1,7 +1,9 @@
-package org.ekl.backend.ws.config;
+package org.ekl.backend.ws.security.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import org.ekl.backend.ws.security.oauth.EklAuthorizationRequestResolver;
+import org.ekl.backend.ws.security.oauth.OAuth2SuccessHandler;
 import org.ekl.backend.ws.token.JWTProvider;
 import org.ekl.backend.ws.token.JWTValidator;
 import org.springframework.context.annotation.Bean;
@@ -22,12 +24,20 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class EklSecurityConfiguration {
+
+    private final OAuth2SuccessHandler successHandler;
+    private final EklAuthorizationRequestResolver authorizationRequestResolver;
+
+    public EklSecurityConfiguration(OAuth2SuccessHandler successHandler,
+                                    EklAuthorizationRequestResolver authorizationRequestResolver) {
+        this.successHandler = successHandler;
+        this.authorizationRequestResolver = authorizationRequestResolver;
+    }
 
     @Bean
     public SecurityFilterChain securityConfigure(HttpSecurity http) throws Exception {
@@ -39,7 +49,7 @@ public class EklSecurityConfiguration {
 //                .formLogin(configurer -> {
 //                    configurer.usernameParameter("user");
 //                    configurer.passwordParameter("pwd");
-////                    configurer.successForwardUrl("/api/user/123456789");
+//                    configurer.successForwardUrl("/api/user/123456789");
 //                    configurer.loginPage("/login");
 //                })
 //                .httpBasic(Customizer.withDefaults())
@@ -47,7 +57,12 @@ public class EklSecurityConfiguration {
 //                        .loginPage("/oauth2/authorization/authcode")
 //                        .defaultSuccessUrl("/api/user/profile", true)
 //                )
-                .oauth2Login(Customizer.withDefaults())
+                .oauth2Login(oauth2 -> oauth2
+                        .authorizationEndpoint(authorization -> authorization
+                                .authorizationRequestResolver(authorizationRequestResolver)
+                        )
+                        .successHandler(successHandler)
+                )
                 .oauth2Client(Customizer.withDefaults())
                 .exceptionHandling(exceptions -> exceptions
                         .defaultAuthenticationEntryPointFor(
@@ -83,4 +98,6 @@ public class EklSecurityConfiguration {
 //        return authenticationFilter;
         return new BearerTokenAuthenticationFilter(authenticationManager);
     }
+
 }
+

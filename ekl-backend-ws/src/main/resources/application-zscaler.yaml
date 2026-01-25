@@ -1,0 +1,7 @@
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          local-oauth-server:
+            issuer-uri: http://localhost:9002

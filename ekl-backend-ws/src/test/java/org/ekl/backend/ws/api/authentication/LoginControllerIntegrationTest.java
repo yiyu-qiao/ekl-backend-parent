@@ -34,7 +34,7 @@ public class LoginControllerIntegrationTest {
     @Test
     public void user_login_positive(){
         //given
-        var loginRequest = new LoginController.LoginRequest();
+        var loginRequest = new AuthController.LoginRequest();
         loginRequest.setPassword("Pwd");
         loginRequest.setUsername("test-user");
 

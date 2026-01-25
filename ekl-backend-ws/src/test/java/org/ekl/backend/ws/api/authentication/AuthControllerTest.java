@@ -1,13 +1,13 @@
 package org.ekl.backend.ws.api.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.ekl.backend.ws.api.user.UserService;
-import org.ekl.backend.ws.config.EklSecurityConfiguration;
-import org.ekl.backend.ws.model.User;
-import org.ekl.backend.ws.token.JWTValidator;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.InjectSoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
+import org.ekl.backend.ws.api.user.UserService;
+import org.ekl.backend.ws.model.User;
+import org.ekl.backend.ws.security.config.EklSecurityConfiguration;
+import org.ekl.backend.ws.token.JWTValidator;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,10 +27,10 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @Disabled
-@WebMvcTest(controllers = {LoginController.class})
+@WebMvcTest(controllers = {AuthController.class})
 @Import({EklSecurityConfiguration.class})
 @ExtendWith(SoftAssertionsExtension.class)
-class LoginControllerTest {
+class AuthControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -51,7 +51,7 @@ class LoginControllerTest {
         user.setUsername("test-user");
         when(userService.getUserByUsername(any())).thenReturn(user);
 
-        var loginRequest = new LoginController.LoginRequest();
+        var loginRequest = new AuthController.LoginRequest();
         loginRequest.setPassword("Pwd");
         loginRequest.setUsername("test-user");
 

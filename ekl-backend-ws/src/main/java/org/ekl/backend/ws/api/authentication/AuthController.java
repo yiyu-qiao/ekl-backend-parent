@@ -1,33 +1,34 @@
 package org.ekl.backend.ws.api.authentication;
 
-import org.ekl.backend.ws.api.user.repository.GroupRepository;
-import org.ekl.backend.ws.api.user.repository.RoleRepository;
-import org.ekl.backend.ws.api.user.UserService;
-import org.ekl.backend.ws.exception.UserNotFoundException;
-import org.ekl.backend.ws.exception.UsernameOrPasswordInvalidException;
-import org.ekl.backend.ws.model.User;
-import org.ekl.backend.ws.token.JWTProvider;
-import org.ekl.backend.ws.api.buildinfo.EklBuildInfo;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.ekl.backend.ws.api.buildinfo.EklBuildInfo;
+import org.ekl.backend.ws.api.user.UserService;
+import org.ekl.backend.ws.api.user.repository.GroupRepository;
+import org.ekl.backend.ws.api.user.repository.RoleRepository;
+import org.ekl.backend.ws.exception.UserNotFoundException;
+import org.ekl.backend.ws.exception.UsernameOrPasswordInvalidException;
+import org.ekl.backend.ws.model.User;
+import org.ekl.backend.ws.token.JWTProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @NoArgsConstructor
 @Slf4j
-public class LoginController {
+@RequestMapping("/api/auth")
+public class AuthController {
 
    @Autowired
    private UserService userService;
@@ -45,7 +46,7 @@ public class LoginController {
     @Autowired
     private EklBuildInfo eklBuildInfo;
 
-    @PostMapping(path= "/api/auth/login",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path= "/login",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> userLogin(@RequestBody @Valid LoginRequest loginRequest) throws UsernameOrPasswordInvalidException, UserNotFoundException {
 //        EklUtilities.printEnvironment(ctx);
         try{
@@ -97,6 +98,14 @@ public class LoginController {
 //        role.setUser(savedUser);
 //        roleRepository.save(role);
 //    }
+
+    @GetMapping("/user")
+    public ResponseEntity<User> getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        User user = (User) auth.getPrincipal();
+        User user = new User();
+        return ResponseEntity.ok(user);
+    }
 
     @Getter
     @Setter

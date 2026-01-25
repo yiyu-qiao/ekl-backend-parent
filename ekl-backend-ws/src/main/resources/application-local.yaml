@@ -32,6 +32,7 @@ spring:
             client-id: mcp-client
             client-secret: mcp-secret
             authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/login/oauth2/code/authcode
             scope:
               - openid
               - profile
@@ -66,3 +67,5 @@ logging:
 #    key-store-password: ${EKL_BACKEND_WS_KEYSTORE_PASSWORD}
 #    enabled-protocols: TLSv1.2,TLSv1.3
 
+
+ekl-host: http://localhost:4200
