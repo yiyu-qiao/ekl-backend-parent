@@ -66,8 +66,8 @@ public class EklSecurityConfiguration {
                 .oauth2Client(Customizer.withDefaults())
                 .exceptionHandling(exceptions -> exceptions
                         .defaultAuthenticationEntryPointFor(
-                            new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED), // Sendet 401
-                            PathPatternRequestMatcher.withDefaults().matcher("/api/**") // Gilt nur für API
+                                new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED), // Sendet 401
+                                PathPatternRequestMatcher.withDefaults().matcher("/api/**") // Gilt nur für API
                         )
                 )
                 .addFilterBefore(createTokenAuthenticationFilter(), AnonymousAuthenticationFilter.class)
@@ -77,17 +77,17 @@ public class EklSecurityConfiguration {
     }
 
     //TODO @Bean muss also works
-    public JwtDecoder createJwtDecoder(){
+    public JwtDecoder createJwtDecoder() {
         JwtDecoder decoder = (s) -> {
             JWTValidator jwtValidator = new JWTValidator();
             JWTProvider jwtProvider = new JWTProvider();
             Jws<Claims> jws = jwtValidator.readJWS(s);
-            return jwtProvider.createSpringSecurityJwtWith(s,jws);
+            return jwtProvider.createSpringSecurityJwtWith(s, jws);
         };
         return decoder;
     }
 
-    public BearerTokenAuthenticationFilter createTokenAuthenticationFilter(){
+    public BearerTokenAuthenticationFilter createTokenAuthenticationFilter() {
         JwtDecoder jwtDecoder = createJwtDecoder();
         AuthenticationProvider authenticationProvider = new JwtAuthenticationProvider(jwtDecoder);
         AuthenticationManager authenticationManager = new ProviderManager(authenticationProvider);
